@@ -31,7 +31,7 @@ async def getmusic(cat):
     video_link = ""
     search = cat
     driver = await chrome()
-    driver.get("https://www.youtube.com/results?search_query=" + search)
+    driver.get(f"https://www.youtube.com/results?search_query={search}")
     user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
     for i in user_data:
         video_link = i.get_attribute("href")
@@ -42,18 +42,15 @@ async def getmusic(cat):
 
 
 async def getmusicvideo(cat):
-    video_link = ""
     search = cat
     driver = await chrome()
-    driver.get("https://www.youtube.com/results?search_query=" + search)
+    driver.get(f"https://www.youtube.com/results?search_query={search}")
     user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
+    video_link = ""
     for i in user_data:
         video_link = i.get_attribute("href")
         break
-    command = (
-        'yt-dlp -f "[filesize<50M]" --no-progress --merge-output-format mp4 '
-        + video_link
-    )
+    command = f'yt-dlp -f "[filesize<50M]" --no-progress --merge-output-format mp4 {video_link}'
     await bash(command)
 
 
@@ -174,7 +171,7 @@ async def _(event):
     else:
         artist = event.pattern_match.group(2)
         song = event.pattern_match.group(3)
-    track = str(artist) + " - " + str(song)
+    track = f"{str(artist)} - {str(song)}"
     chat = "@SpotifyMusicDownloaderBot"
     try:
         await event.edit("`Getting Your Music...`")
@@ -221,7 +218,7 @@ async def _(event):
     else:
         artist = event.pattern_match.group(2)
         song = event.pattern_match.group(3)
-    track = str(artist) + " - " + str(song)
+    track = f"{str(artist)} - {str(song)}"
     chat = "@WooMaiBot"
     link = f"/netease {track}"
     await event.edit("`Searching...`")
